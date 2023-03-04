@@ -1,7 +1,7 @@
 # ToDoList
 
-*стек: python3.9, Django, Postgres
-*запуск: установить зависимости,
+* стек: python3.9, Django, Postgres
+* запуск: установить зависимости,
 заполнить .env(
 SECRET_KEY,
 DEBUG,
