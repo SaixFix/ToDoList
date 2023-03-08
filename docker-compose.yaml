@@ -5,7 +5,7 @@ services:
     build:
       context: .
     volumes:
-      - ./.env:/code/.env
+      - ./.env:/app/.env
     depends_on:
       pg:
         condition: service_healthy
@@ -16,11 +16,13 @@ services:
     build:
       context: .
     volumes:
-      - ./.env:/code/.env
+      - ./.env:/app/.env
     depends_on:
       pg:
         condition: service_healthy
     command: python manage.py migrate
+
+
   pg:
     image: postgres:latest
     environment:

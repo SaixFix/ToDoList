@@ -1,12 +1,8 @@
 FROM python:3.10-slim
 
-WORKDIR /code
+WORKDIR /app
 COPY  requirements.txt .
-RUN apt-get update \
-    && apt-get -y install libpq-dev gcc \
-    && pip install -r requirements.txt
-COPY manage.py .
-COPY todolist .
-COPY core .
+RUN pip install -r requirements.txt
+COPY . .
 
-CMD python manage.py runserver 0.0.0.0:8000
+CMD python ./manage.py runserver 0.0.0.0:8000
