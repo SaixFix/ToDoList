@@ -11,6 +11,7 @@ services:
   api:
     build:
       context: .
+    image: saixfix/todo_saixfix_app
     volumes:
       - ./.env:/app/.env
     ports:
@@ -24,6 +25,7 @@ services:
   migrations:
     build:
       context: .
+    image: saixfix/todo_saixfix_app
     volumes:
       - ./.env:/app/.env
     depends_on:
@@ -39,7 +41,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: todolist_app
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - ./pg_data:/var/lib/postgresql/datasexit
+      - e
     ports:
       - "5432:5432"
     healthcheck:
