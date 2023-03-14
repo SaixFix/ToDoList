@@ -160,3 +160,4 @@ cython_debug/
 
 .idea/
 /1.env
+!/home.env
