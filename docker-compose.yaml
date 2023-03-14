@@ -41,8 +41,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: todolist_app
     volumes:
-      - ./pg_data:/var/lib/postgresql/datasexit
-      - e
+      - ./pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
