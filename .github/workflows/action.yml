@@ -9,4 +9,4 @@ jobs:
       - name: docker build
         run: docker build -t saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker push
-        run: dicker push saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+        run: docker push saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
