@@ -48,7 +48,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          # -S для считывания пароля из потока ввода командой sudo
+          # -S для считывания пароля из потока ввода командой sudo p
           script: |
             cd app
             echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d
