@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  front:
+    image: sermalenk/skypro-front:lesson-38
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+  api:
+    image: saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    volumes:
+      - ./.env:/app/.env
+    ports:
+      - '8000:8000'
+    depends_on:
+      pg:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
+  migrations:
+    image: saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    volumes:
+      - ./.env:/app/.env
+    depends_on:
+      pg:
+        condition: service_healthy
+    command: python manage.py migrate
+
+
+  pg:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -12,3 +12,45 @@ jobs:
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USER_NAME }} --password-stdin
       - name: docker push
         run: docker push saixfix/todo_saixfix_app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    env:
+      #переменные для окружения
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    steps:
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: render config
+        run: |
+          mkdir deploy
+          cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
+          cat .env-ci | envsubst > deploy/.env
+      - name: copy files to server
+        #после @ гит ветка
+        uses: actions/checkout@master
+        with:
+          #Данные для входа на ВМ
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "deploy/docker-compose.yaml,deploy/.env"
+          target: "app"
+          strip_components: 1
+
+      - name: deploy app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          # -S для считывания пароля из потока ввода командой sudo
+          script: |
+            cd app
+            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d
+
+          

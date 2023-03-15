@@ -80,12 +80,12 @@ WSGI_APPLICATION = 'todolist.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv("ENGINE_DB"),
-        'NAME': os.getenv("NAME_DB"),
-        'USER': os.getenv("USER_DB"),
-        'PASSWORD': os.getenv("PASSWORD_DB"),
-        'HOST': os.getenv("HOST_DB"),
-        'PORT': os.getenv("PORT_DB"),
+        'ENGINE': os.getenv("DB_ENGINE"),
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
     }
 }
 
