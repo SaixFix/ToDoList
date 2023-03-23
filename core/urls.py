@@ -5,4 +5,5 @@ from core.views import *
 urlpatterns = [
     path('signup', UserCreateView.as_view(), name='create_user'),
     path('login', LoginUserView.as_view(), name='login'),
+    path('profile', UserRetrieveUpdateDestroyView.as_view(), name='profile'),
 ]
