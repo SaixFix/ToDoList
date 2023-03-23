@@ -1,31 +1,37 @@
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from core.models import User
-from core.validators import check_password_validate_and_match
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(required=True)
     password_repeat = serializers.CharField(required=True, write_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password', 'password_repeat')
 
+    def validate(self, attrs: dict) -> dict:
+        """Проверяем пароли на совпадение и прогоняем по валидаторам"""
+
+        validate_password(attrs['password'])
+
+        if attrs['password'] != attrs['password_repeat']:
+            raise ValidationError(
+                {'check_password_match': 'пароли не совпадают'}
+            )
+        return attrs
+
     def create(self, validated_data: dict) -> User:
-        password = self.initial_data.pop('password')
-        password_repeat = self.initial_data.pop('password_repeat')
-
-        # проверка на совпадение паролей
-        check_password_validate_and_match(password, password_repeat)
-
         del validated_data['password_repeat']
 
-        user = User.objects.create(**validated_data)
+        # хешируем пароль и сохраняет пользователя 1 запросом к базе
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
 
-        # хешируем пароль
-        user.set_password(user.password)
-        user.save()
-        return user
 
 
 class UserRetrieveUpdateSerializer(serializers.ModelSerializer):
