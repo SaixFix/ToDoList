@@ -4,5 +4,4 @@ from core.views import *
 
 urlpatterns = [
     path('signup/', UserCreateView.as_view(), name='create_user'),
-    path('', include('rest_framework.urls')),
 ]
