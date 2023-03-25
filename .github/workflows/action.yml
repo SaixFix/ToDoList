@@ -1,8 +1,8 @@
-name: Build and deploy wokflow
+name: Build and deploy
 on:
   push:
     branches:
-      -master
+      - master
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
