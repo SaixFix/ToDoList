@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
@@ -47,7 +47,8 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'password')
+        read_only_fields = ('id', 'first_name', 'last_name', 'username', 'email')
 
     def create(self, validated_data):
         user = authenticate(
@@ -58,3 +59,27 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user:
             raise AuthenticationFailed
         return user
+
+
+class PasswordChangeSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True, required=True, min_length=1)
+    new_password = serializers.CharField(write_only=True, required=True, min_length=1)
+
+    class Meta:
+        model = User
+        fields = ('new_password', 'old_password')
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        old_password = validated_data['old_password']
+        new_password = validated_data['new_password']
+        if not instance.check_password(old_password):
+            raise ValidationError('old_password не верен')
+
+        validate_password(new_password)
+
+        instance.set_password(new_password)
+        instance.save()
+
+        return instance
+
+

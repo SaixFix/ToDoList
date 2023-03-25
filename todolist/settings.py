@@ -46,10 +46,10 @@ INSTALLED_APPS = [
     'core',
 ]
 
-if DEBUG:
-    INSTALLED_APPS += [
-        'django_extensions',
-    ]
+# if DEBUG:
+#     INSTALLED_APPS += [
+#         'django_extensions',
+#     ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
