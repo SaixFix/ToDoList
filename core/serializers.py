@@ -6,6 +6,13 @@ from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
 from core.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ('username',)
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(required=True)
