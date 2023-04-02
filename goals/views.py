@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, filters
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 
-from goals.models import GoalCategory
+from goals.filters import GoalDateFilter
+from goals.models import GoalCategory, Goal
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer
 
 
@@ -44,3 +46,11 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         instance.is_deleted = True
         instance.save()
         return instance
+
+
+class GoalListView(generics.ListAPIView):
+    model = Goal
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+    filterset_class = GoalDateFilter

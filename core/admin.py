@@ -2,4 +2,10 @@ from django.contrib import admin
 
 from core.models import User
 
-admin.site.register(User)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "email", "is_staff", "is_active")
+    search_fields = ("username", "email")
+
+
+admin.site.register(User, UserAdmin)

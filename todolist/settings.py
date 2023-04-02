@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'social_django',
     'drf_spectacular',
+    'django_filters',
     'core',
     'goals',
+
 ]
 
 # if DEBUG:

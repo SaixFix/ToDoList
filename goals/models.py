@@ -48,8 +48,8 @@ class Goal(models.Model):
 
     title = models.CharField(verbose_name="Название", max_length=200)
     description = models.CharField(verbose_name="Описание", max_length=500)
-    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
-    category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.CASCADE)
+    category = models.ForeignKey(GoalCategory, verbose_name="Категория", null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(verbose_name="Дата создания")
     deadline_date = models.DateTimeField(verbose_name="Дата дедлайна")
     status = models.PositiveSmallIntegerField(
