@@ -6,7 +6,8 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal
-from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer
+from goals.serializers import GoalCategorySerializer, GoalCategoryCreateSerializer, GoalListSerializer, \
+    GoalCreateSerializer
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
@@ -41,8 +42,11 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
 
-    def perform_destroy(self, instance):
-        """чтобы категории не удалялись при вызове delete"""
+    def perform_destroy(self, instance: GoalCategory):
+        """переназначаем  функцию чтобы категории не удалялись при вызове delete,
+         меняем статус у всех связанных с категорией целях,
+         меняем значение is_deleted"""
+        instance.goals.update(status=4)
         instance.is_deleted = True
         instance.save()
         return instance
@@ -50,7 +54,18 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 
 class GoalListView(generics.ListAPIView):
     model = Goal
+    serializer_class = GoalListSerializer
     filter_backends = [
         DjangoFilterBackend,
     ]
     filterset_class = GoalDateFilter
+
+    def get_queryset(self):
+        return Goal.objects.filter(user=self.request.user)
+
+
+class GoalCreateView(generics.CreateAPIView):
+    model = Goal
+    serializer_class = GoalCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+

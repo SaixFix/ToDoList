@@ -30,7 +30,7 @@ class GoalListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = "__all__"
-        read_only_fields = "__all__"
+        read_only_fields = ("__all__",)
 
 
 class GoalCreateSerializer(serializers.ModelSerializer):
@@ -45,6 +45,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         if value.is_deleted:
             raise serializers.ValidationError("not allowed in deleted category")
 
+        #проверка на владельца
         if value.user != self.context["request"].user:
             raise serializers.ValidationError("not owner of category")
 

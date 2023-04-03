@@ -6,5 +6,6 @@ RUN pip install -r requirements.txt
 COPY manage.py .
 COPY todolist todolist
 COPY core core
+COPY goals goals
 
 CMD python ./manage.py runserver 0.0.0.0:8000
