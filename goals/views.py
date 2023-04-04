@@ -7,7 +7,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal
 from goals.serializers import GoalCategorySerializer, GoalCategoryCreateSerializer, GoalListSerializer, \
-    GoalCreateSerializer
+    GoalCreateSerializer, GoalSerializer
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
@@ -68,4 +68,20 @@ class GoalCreateView(generics.CreateAPIView):
     model = Goal
     serializer_class = GoalCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class GoalView(RetrieveUpdateDestroyAPIView):
+    model = Goal
+    serializer_class = GoalSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Goal.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance: Goal):
+        """переназначаем  функцию чтобы цель не удалялись при вызове delete,
+         меняем значение status"""
+        instance.status = 4
+        instance.save()
+        return instance
 

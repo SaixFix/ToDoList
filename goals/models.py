@@ -48,7 +48,7 @@ class Goal(models.Model):
     description = models.CharField(verbose_name="Описание", max_length=500)
     user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.CASCADE)
     category = models.ForeignKey(
-        to=GoalCategory, verbose_name="Категория",
+        GoalCategory, verbose_name="Категория",
         on_delete=models.PROTECT, related_name="goals"
     )
     created = models.DateTimeField(verbose_name="Дата создания")

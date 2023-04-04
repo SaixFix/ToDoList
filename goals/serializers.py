@@ -45,7 +45,28 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         if value.is_deleted:
             raise serializers.ValidationError("not allowed in deleted category")
 
-        #проверка на владельца
+        # проверка на владельца
+        if value.user != self.context["request"].user:
+            raise serializers.ValidationError("not owner of category")
+
+        return value
+
+
+class GoalSerializer(serializers.ModelSerializer):
+    """Новый сериалайзер потребовался для того, чтобы убрать
+    логику с подстановкой текущего пользователя в поле user."""
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Goal
+        fields = "__all__"
+        read_only_fields = ("id", "created", "user")
+
+    def validate_category(self, value):
+        if value.is_deleted:
+            raise serializers.ValidationError("not allowed in deleted category")
+
+        # проверка на владельца
         if value.user != self.context["request"].user:
             raise serializers.ValidationError("not owner of category")
 
