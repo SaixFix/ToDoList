@@ -1,13 +1,9 @@
-from django.shortcuts import render
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import permissions, filters
-from rest_framework import generics
+from rest_framework import generics, permissions, filters
+
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 
-from goals.filters import GoalDateFilter
-from goals.models import GoalCategory, Goal
-from goals.serializers import GoalCategorySerializer, GoalCategoryCreateSerializer, GoalListSerializer, \
-    GoalCreateSerializer, GoalSerializer
+from goals.models.goal_category import GoalCategory
+from goals.serializers.goal_category import GoalCategoryCreateSerializer, GoalCategorySerializer
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
@@ -50,38 +46,3 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         instance.is_deleted = True
         instance.save()
         return instance
-
-
-class GoalListView(generics.ListAPIView):
-    model = Goal
-    serializer_class = GoalListSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-    ]
-    filterset_class = GoalDateFilter
-
-    def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
-
-
-class GoalCreateView(generics.CreateAPIView):
-    model = Goal
-    serializer_class = GoalCreateSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class GoalView(RetrieveUpdateDestroyAPIView):
-    model = Goal
-    serializer_class = GoalSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
-
-    def perform_destroy(self, instance: Goal):
-        """переназначаем  функцию чтобы цель не удалялись при вызове delete,
-         меняем значение status"""
-        instance.status = 4
-        instance.save()
-        return instance
-

@@ -1,29 +1,7 @@
 from rest_framework import serializers
 
 from core.serializers import UserSerializer
-from goals.models import GoalCategory, Goal
-
-
-class GoalCategoryCreateSerializer(serializers.ModelSerializer):
-    #  при создании категории в поле user будет проставлен
-    #  тот пользователь, от чьего имени создавалась категория.
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = GoalCategory
-        fields = "__all__"
-        read_only_fields = ("id", "created", "updated", "user")
-
-
-class GoalCategorySerializer(serializers.ModelSerializer):
-    """Новый сериалайзер потребовался для того, чтобы убрать
-    логику с подстановкой текущего пользователя в поле user."""
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = GoalCategory
-        fields = "__all__"
-        read_only_fields = ("id", "created", "updated", "user")
+from goals.models.goal import Goal
 
 
 class GoalListSerializer(serializers.ModelSerializer):
@@ -39,7 +17,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = "__all__"
-        read_only_fields = ("id", "created", "user")
+        read_only_fields = ("id", "created", "user", "updated")
 
     def validate_category(self, value):
         if value.is_deleted:
@@ -60,7 +38,7 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = "__all__"
-        read_only_fields = ("id", "created", "user")
+        read_only_fields = ("id", "created", "user", "updated")
 
     def validate_category(self, value):
         if value.is_deleted:
