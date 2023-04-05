@@ -1,6 +1,6 @@
 version: "3.9"
 
-services:
+services: #
   front:
     image: sermalenk/skypro-front:lesson-36
     ports:
