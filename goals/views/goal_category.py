@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions, filters
 
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.pagination import LimitOffsetPagination
 
 from goals.models.goal_category import GoalCategory
 from goals.serializers.goal_category import GoalCategoryCreateSerializer, GoalCategorySerializer
@@ -22,6 +23,7 @@ class GoalCategoryListView(generics.ListAPIView):
     ordering_fields = ["title", "created"]
     ordering = ["title"]  # сортировка по умолчанию
     search_fields = ["title"]
+    pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
         """Фильтруем по пользователю и только со статусом не удаленная"""

@@ -32,7 +32,7 @@ class Goal(DatesModelMixin):
         GoalCategory, verbose_name="Категория",
         on_delete=models.PROTECT, related_name="goals"
     )
-    deadline_date = models.DateTimeField(verbose_name="Дата дедлайна")
+    due_date = models.DateTimeField(verbose_name="Дата дедлайна")
     status = models.PositiveSmallIntegerField(
         verbose_name="Статус", choices=Status.choices, default=Status.to_do
     )

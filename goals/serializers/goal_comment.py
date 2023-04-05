@@ -20,6 +20,8 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         if value.user != self.context["request"].user:
             raise serializers.ValidationError("not owner of goal")
 
+        return value
+
 
 class GoalCommentSerializer(serializers.ModelSerializer):
     """Этот сериалайзер потребовался для того, чтобы убрать
