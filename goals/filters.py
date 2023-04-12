@@ -1,7 +1,6 @@
 import django_filters
 from django.db import models
 from django_filters import rest_framework
-from rest_framework.pagination import PageNumberPagination
 
 from goals.models.goal import Goal
 from goals.models.goal_comment import GoalComment

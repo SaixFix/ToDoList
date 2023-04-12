@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import generics, permissions, filters
 
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
@@ -28,7 +29,8 @@ class GoalCategoryListView(generics.ListAPIView):
     def get_queryset(self):
         """Фильтруем по пользователю и только со статусом не удаленная"""
         return GoalCategory.objects.filter(
-            user=self.request.user, is_deleted=False
+            board__participants__user__id=self.request.user.id,
+            is_deleted=False
         )
 
 
@@ -38,13 +40,18 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
+        """Фильтруем по пользователю и только со статусом не удаленная"""
+        return GoalCategory.objects.filter(
+            board__participants__user__id=self.request.user.id,
+            is_deleted=False
+        )
 
     def perform_destroy(self, instance: GoalCategory):
         """переназначаем  функцию чтобы категории не удалялись при вызове delete,
          меняем статус у всех связанных с категорией целях,
          меняем значение is_deleted"""
-        instance.goals.update(status=4)
-        instance.is_deleted = True
-        instance.save()
+        with transaction.atomic():
+            instance.goals.update(status=4)
+            instance.is_deleted = True
+            instance.save()
         return instance

@@ -15,19 +15,21 @@ def create_objects(apps, schema_editor):
     BoardParticipant = apps.get_model("goals", "BoardParticipant")
     GoalCategory = apps.get_model("goals", "GoalCategory")
 
+    now = timezone.now()
+
     with transaction.atomic():  # Применяем все изменения одной транзакцией
         for user in User.objects.all():  # Для каждого пользователя
             new_board = Board.objects.create(
                 title="Мои цели",
-                created=timezone.now(),  # Проставляем вручную по той же причине, что описана вверху
-                updated=timezone.now()
+                created=now,  # Проставляем вручную по той же причине, что описана вверху
+                updated=now
             )
             BoardParticipant.objects.create(
                 user=user,
                 board=new_board,
                 role=1,  # Владелец, проставляем числом, не импортируем код по той же причине
-                created=timezone.now(),
-                updated=timezone.now()
+                created=now,
+                updated=now
             )
 
             # проставляем всем категориям пользователя его доску
