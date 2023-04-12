@@ -18,7 +18,6 @@ class BoardCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-
 class BoardListView(generics.ListAPIView):
     model = Board
     serializer_class = BoardCreateSerializer
@@ -32,7 +31,7 @@ class BoardListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Board.objects.filter(
-            participants__user__id=self.request.user.id,
+            participants__user_id=self.request.user.id,
             is_deleted=False
         )
 
@@ -44,9 +43,9 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         # Фильтрация идет через participants
-        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+        return Board.objects.filter(is_deleted=False)
 
-    def perform_destroy(self, instance: Board):
+    def perform_destroy(self, instance):
         # При удалении доски помечаем ее как is_deleted,
         # «удаляем» категории, обновляем статус целей
         with transaction.atomic():

@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from core.serializers import UserSerializer
+from goals.models.board import BoardParticipant
 from goals.models.goal_category import GoalCategory
 
 
@@ -13,6 +15,18 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
         model = GoalCategory
         fields = "__all__"
         read_only_fields = ("id", "created", "updated", "user")
+
+    def validate(self, attrs):
+        role_user = BoardParticipant.objects.filter(
+            user=attrs.get('user'),
+            board=attrs.get('board'),
+            role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer]
+        ).exists()
+
+        if not role_user:
+            raise ValidationError('Недостаточно прав')
+
+        return attrs
 
 
 class GoalCategorySerializer(serializers.ModelSerializer):
