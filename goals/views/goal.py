@@ -26,7 +26,10 @@ class GoalListView(generics.ListAPIView):
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
-        return Goal.objects.filter(category__board__participants__user=self.request.user)
+        return Goal.objects.filter(
+            category__board__participants__user_id=self.request.user.id,
+            category__is_deleted=False
+        ).filter(status__in=[1, 2, 3])
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
@@ -35,7 +38,10 @@ class GoalView(RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
+        return Goal.objects.filter(
+            category__board__participants__user_id=self.request.user.id,
+            category__is_deleted=False
+        ).filter(status__in=[1, 2, 3])
 
     def perform_destroy(self, instance: Goal):
         """переназначаем  функцию чтобы цель не удалялись при вызове delete,
