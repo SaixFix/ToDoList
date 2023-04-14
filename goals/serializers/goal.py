@@ -32,18 +32,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
             raise ValidationError('Недостаточно прав')
 
         return attrs
-    # def validate_category(self, value):
-    #     if value.is_deleted:
-    #         raise serializers.ValidationError("not allowed in deleted category")
-    #
-    #     if not BoardParticipant.objects.filter(
-    #             board=value.category.board_id,
-    #             role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
-    #             user_id=self.context["request"].user.id
-    #     ).exists():
-    #         raise serializers.ValidationError("permission denied")
-    #
-    #     return value
+
 
 
 class GoalSerializer(serializers.ModelSerializer):
@@ -55,12 +44,3 @@ class GoalSerializer(serializers.ModelSerializer):
         model = Goal
         fields = "__all__"
         read_only_fields = ("id", "created", "user", "updated")
-
-    def validate_category(self, value):
-        if value.is_deleted:
-            raise serializers.ValidationError('not allowed in deleted category')
-
-        if value.user != self.context['request'].user:
-            raise serializers.ValidationError('not owner of category')
-
-        return value

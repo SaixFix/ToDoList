@@ -45,7 +45,6 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "is_deleted")
 
     def update(self, instance: Board, validated_data: dict) -> Board:
-        # # ваш код для работы с участниками
         with transaction.atomic():
             #Фильтруем по текущей доске икслючая владельца и удаляем
             BoardParticipant.objects.filter(board=instance).exclude(user=self.context["request"].user).delete()
