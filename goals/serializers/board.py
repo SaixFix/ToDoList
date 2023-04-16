@@ -13,7 +13,9 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "is_deleted")
         fields = "__all__"
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Board:
+        """Создаем обьект board и BoardParticipant для текущего пользователя
+         и присваеваем ему роль владельца"""
         user = validated_data.pop("user")
         board = Board.objects.create(**validated_data)
         BoardParticipant.objects.create(
@@ -46,7 +48,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Board, validated_data: dict) -> Board:
         with transaction.atomic():
-            #Фильтруем по текущей доске икслючая владельца и удаляем
+            # Фильтруем по текущей доске икслючая владельца и удаляем
             BoardParticipant.objects.filter(board=instance).exclude(user=self.context["request"].user).delete()
             BoardParticipant.objects.bulk_create([
                 BoardParticipant(

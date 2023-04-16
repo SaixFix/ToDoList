@@ -52,7 +52,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
             is_deleted=False
         )
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: GoalCategory):
         """переназначаем  функцию чтобы категории не удалялись при вызове delete,
          меняем статус у всех связанных с категорией целях,
          меняем значение is_deleted"""

@@ -21,12 +21,17 @@ class GoalCommentAdmin(admin.ModelAdmin):
     search_fields = ("text", "user")
 
 
+class BoardAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_deleted", "inlines")
+    search_fields = ("title",)
+
+
 class BoardParticipantAdmin(admin.ModelAdmin):
-    list_display = ("board", "user", "role", "created", "updated")
-    search_fields = ("board", "user")
+    list_display = ("board", "user", "role")
 
 
 admin.site.register(GoalCategory, GoalCategoryAdmin)
 admin.site.register(Goal, GoalAdmin)
 admin.site.register(GoalComment, GoalCommentAdmin)
 admin.site.register(BoardParticipant, BoardParticipantAdmin)
+admin.site.register(Board, BoardAdmin)

@@ -16,7 +16,7 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("id", "created", "updated", "user")
 
-    def validate_goal(self, value):
+    def validate_goal(self, value: Goal):
         if not BoardParticipant.objects.filter(
             board=value.category.board_id,
             role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
@@ -37,7 +37,7 @@ class GoalCommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("id", "created", "updated", "user", "goal")
 
-    def validate_goal(self, value):
+    def validate_goal(self, value: Goal):
         if value.status == Goal.status == 4:
             raise serializers.ValidationError('Goal not found')
         # проверка на владельца

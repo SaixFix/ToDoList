@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
 from core.models import User
+
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
@@ -57,7 +58,7 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'username', 'email', 'password')
         read_only_fields = ('id', 'first_name', 'last_name', 'username', 'email')
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> User:
         user = authenticate(
             username=validated_data['username'],
             password=validated_data['password']
@@ -88,5 +89,3 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-

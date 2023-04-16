@@ -45,7 +45,7 @@ class BoardView(RetrieveUpdateDestroyAPIView):
         # Фильтрация идет через participants
         return Board.objects.filter(is_deleted=False)
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: Board):
         # При удалении доски помечаем ее как is_deleted,
         # «удаляем» категории, обновляем статус целей
         with transaction.atomic():

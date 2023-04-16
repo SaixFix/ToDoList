@@ -21,7 +21,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("id", "created", "user", "updated")
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         role_use = BoardParticipant.objects.filter(
             user=attrs.get('user'),
             board=attrs.get('category').board,
@@ -34,9 +34,8 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
-
 class GoalSerializer(serializers.ModelSerializer):
-    """Новый сериалайзер потребовался для того, чтобы убрать
+    """Данный сериалайзер потребовался для того, чтобы убрать
     логику с подстановкой текущего пользователя в поле user."""
     user = UserSerializer(read_only=True)
 
