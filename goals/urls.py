@@ -24,7 +24,7 @@ urlpatterns = [
         name='get goal_comment by pk and Retrieve Update Destroy'
         ),
     # Board
-    path("board/create", board.BoardCreateView.as_view(), name='board create'),
+    path("board/create", board.BoardCreateView.as_view(), name='board_create'),
     path("board/list", board.BoardListView.as_view(), name='board list view'),
     path(
         "board/<pk>", board.BoardView.as_view(),
