@@ -27,6 +27,7 @@ class TestBoardCreate:
         Неавторизованный пользователь при создание доски получит ошибку авторизации 403
         """
         response = client.post(self.url, data=board_create_data())
+
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_failed_to_create_deleted_board(self, auth_client, board_create_data):
@@ -34,6 +35,7 @@ class TestBoardCreate:
         При создание доски нельзя указать флаг is_deleted=True
         """
         response = auth_client.post(self.url, data=board_create_data(is_deleted=True))
+
         assert response.status_code == status.HTTP_201_CREATED
         assert response.json() == self._serialize_board_response(is_deleted=False)
         assert Board.objects.last().is_deleted is False
@@ -43,6 +45,7 @@ class TestBoardCreate:
         При создание доски пользователь становится владельцем
         """
         response = auth_client.post(self.url, data=board_create_data())
+
         assert response.status_code == status.HTTP_201_CREATED
         board_participant = BoardParticipant.objects.get(user_id=user.id)
         assert board_participant.board_id == response.data['id']
