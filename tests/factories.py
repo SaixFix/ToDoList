@@ -5,6 +5,7 @@ from pytest_factoryboy import register
 from core.models import User
 from goals.models.board import Board, BoardParticipant
 from goals.models.goal_category import GoalCategory
+from goals.models.goal_comment import GoalComment
 
 
 @register
@@ -61,3 +62,9 @@ class GoalCategoryFactory(DatesFactoryMixin):
     class Meta:
         model = GoalCategory
 
+
+class CommentFactory(DatesFactoryMixin):
+    class Meta:
+        model = GoalComment
+
+    text = 'text comment'

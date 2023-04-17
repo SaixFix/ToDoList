@@ -17,11 +17,11 @@ urlpatterns = [
         name='get goal by pk and Retrieve Update Destroy'
         ),
     # Goal comment
-    path("goal_comment/create", goal_comment.GoalCommentCreateView.as_view(), name='goal_comment create'),
-    path("goal_comment/list", goal_comment.GoalCommentListView.as_view(), name='get goal_comment list'),
+    path("goal_comment/create", goal_comment.GoalCommentCreateView.as_view(), name='goal_comment_create'),
+    path("goal_comment/list", goal_comment.GoalCommentListView.as_view(), name='get_goal_comment_list'),
     path(
         "goal_comment/<pk>", goal_comment.GoalCommentView.as_view(),
-        name='get goal_comment by pk and Retrieve Update Destroy'
+        name='get_goal_comment_by_pk_and_RUD'
         ),
     # Board
     path("board/create", board.BoardCreateView.as_view(), name='board_create'),
