@@ -1,6 +1,6 @@
 # ToDoList
 
-* стек: python3.9, Django, Postgres
+* стек: python3.9, Django, Postgres, SWAGGER
 * запуск: установить зависимости,
 заполнить .env(
 SECRET_KEY,
